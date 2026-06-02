@@ -462,7 +462,7 @@ void SpineSprite::_bind_methods() {
 
 	ClassDB::bind_method(D_METHOD("update_skeleton", "delta"), &SpineSprite::update_skeleton);
 	ClassDB::bind_method(D_METHOD("new_skin", "name"), &SpineSprite::new_skin);
-
+	ClassDB::bind_method(D_METHOD("update_meshes_from_current_pose"), &SpineSprite::update_meshes_from_current_pose);
 	ADD_SIGNAL(MethodInfo("animation_started", PropertyInfo(Variant::OBJECT, "spine_sprite", PROPERTY_HINT_TYPE_STRING, "SpineSprite"),
 						  PropertyInfo(Variant::OBJECT, "animation_state", PROPERTY_HINT_TYPE_STRING, "SpineAnimationState"),
 						  PropertyInfo(Variant::OBJECT, "track_entry", PROPERTY_HINT_TYPE_STRING, "SpineTrackEntry")));
@@ -556,7 +556,12 @@ SpineSprite::~SpineSprite() {
 		for (int i = 0; i < 4; i++) statics.default_materials[i].unref();
 	}
 }
-
+void SpineSprite::update_meshes_from_current_pose() {
+	if (!skeleton.is_valid()) return;
+	sort_slot_nodes();
+	update_meshes(skeleton);
+	queue_redraw();
+}
 void SpineSprite::set_skeleton_data_res(const Ref<SpineSkeletonDataResource> &_skeleton_data) {
 	skeleton_data_res = _skeleton_data;
 	on_skeleton_data_changed();
