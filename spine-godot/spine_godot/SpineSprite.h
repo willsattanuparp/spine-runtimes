@@ -202,6 +202,8 @@ public:
 
 	void update_skeleton(float delta);
 
+	void update_meshes_from_current_pose();
+
 	Transform2D get_global_bone_transform(const String &bone_name);
 
 	void set_global_bone_transform(const String &bone_name, Transform2D transform);
